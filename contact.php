@@ -1,6 +1,6 @@
 <?php
 // Defina o endereço de e-mail de recebimento
-$receiving_email_address = 'reformulaofc@gmail.com';
+$receiving_email_address = '0000998257@senaimgaluno.com.br';
 
 // Verifique se os dados do formulário foram enviados
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
