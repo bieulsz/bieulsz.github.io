@@ -4,7 +4,7 @@ $receiving_email_address = '0000998257@senaimgaluno.com.br';
 
 // Verifique se os dados do formulário foram enviados e o método de requisição é POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Coletar dados do formulário e aplicar escapes
+    // Coletar dados do formulário e aplicar escapes para segurança
     $from_name = htmlspecialchars(trim($_POST['name']));
     $from_email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $subject = htmlspecialchars(trim($_POST['subject']));
@@ -12,8 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Validar os dados do formulário
     if (empty($from_name) || empty($from_email) || empty($subject) || empty($message) || !filter_var($from_email, FILTER_VALIDATE_EMAIL)) {
-        // Dados inválidos, enviar resposta adequada
-        http_response_code(400); // Bad Request
+        // Se algum campo estiver vazio ou email inválido, retorna erro 400
+        http_response_code(400);
         echo "Por favor, preencha o formulário corretamente.";
         exit;
     }
@@ -31,17 +31,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email_headers .= "Content-type:text/plain;charset=UTF-8" . "\r\n";
     $email_headers .= "From: $from_name <$from_email>" . "\r\n";
 
-    // Enviar o e-mail
+    // Enviar o e-mail usando a função mail()
     if (mail($receiving_email_address, $subject, $email_content, $email_headers)) {
-        http_response_code(200); // OK
+        // Se o email foi enviado com sucesso, retorna código 200
+        http_response_code(200);
         echo "Obrigado! Sua mensagem foi enviada.";
     } else {
-        http_response_code(500); // Internal Server Error
+        // Se houve algum erro ao enviar o email, retorna erro 500
+        http_response_code(500);
         echo "Oops! Algo deu errado e não conseguimos enviar sua mensagem.";
     }
 } else {
-    // Não é uma solicitação POST, enviar resposta adequada
-    http_response_code(405); // Method Not Allowed
+    // Se a requisição não foi feita via POST, retorna erro 405
+    http_response_code(405);
     echo "Por favor, envie o formulário.";
 }
 ?>
